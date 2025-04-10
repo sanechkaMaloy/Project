@@ -1,0 +1,29 @@
+﻿.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-end;
+    margin-top: 5%;
+}
+
+.diagram1 {
+    width: 30%;
+    height: auto;
+}
+
+.diagram2 {
+    width: 50%;
+    height: auto;
+}
+
+.label1 {
+    font-size: 30px;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+.label2 {
+    font-size: 30px;
+    margin-top: 2rem;
+    font-weight: bold;
+}

@@ -1,0 +1,131 @@
+﻿@page "/register"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f8ff;
+    }
+
+    .page {
+        width: 100%;
+        height: 100%;
+    }
+
+    .content {
+        width: 100%;
+        height: 80%;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .login-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-form">
+        <EditForm Model="@registerModel" OnValidSubmit="HandleRegister" FormName="registerForm">
+            <DataAnnotationsValidator />
+            <div class="mb-3 text-center flex-column">
+                <img src="/favicon.png" style="max-height:5rem;" />
+                <h3>REGISTRATION</h3>
+            </div>
+
+            <div>
+                <label>Username:</label>
+                <InputText @bind-Value="registerModel.Username" class="form-control" />
+                <ValidationMessage For="() => registerModel.Username" />
+                @if (!string.IsNullOrEmpty(UsernameError))
+                {
+                    <div class="text-danger">@UsernameError</div>
+                }
+            </div>
+
+            <div>
+                <label>Password:</label>
+                <InputText @bind-Value="registerModel.Password" class="form-control" type="password" />
+                <ValidationMessage For="() => registerModel.Password" />
+            </div>
+
+            <div>
+                <label>Confirm Password:</label>
+                <InputText @bind-Value="registerModel.ConfirmPassword" class="form-control" type="password" />
+                <ValidationMessage For="() => registerModel.ConfirmPassword" />
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Register</button>
+        </EditForm>
+    </div>
+</div>
+@code {
+    private RegisterModel registerModel = new();
+    private string ErrorMessage = "";
+    private string UsernameError = "";
+
+    private async Task HandleRegister()
+    {
+        var token = await Http.GetStringAsync("api/antiforgery/token"); // Отримуємо токен
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "api/auth/register")
+            {
+                Content = JsonContent.Create(registerModel, options: new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null }) // Виправлення JSON
+            };
+        request.Headers.Add("X-CSRF-TOKEN", token);
+
+        var response = await Http.SendAsync(request);
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            if (responseContent.Contains("User already exists"))
+            {
+                UsernameError = "This username is already taken.";
+            }
+            else
+            {
+                ErrorMessage = "Registration failed";
+            }
+        }
+    }
+
+
+
+
+    public class RegisterModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, provide username")]
+        public string? Username { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, provide password")]
+        public string? Password { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, provide password")]
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        public string? ConfirmPassword { get; set; }
+    }
+}

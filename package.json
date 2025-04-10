@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "apexcharts": "^4.5.0",
+    "bootstrap-icons": "^1.11.3",
+    "chart.js": "^4.4.8",
+    "country-state-city": "^3.2.1"
+  }
+}

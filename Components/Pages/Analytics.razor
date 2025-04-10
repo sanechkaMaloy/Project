@@ -1,0 +1,174 @@
+﻿@page "/analytics"
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject TripService TripService
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<PageTitle>Analytics</PageTitle>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f8ff;
+    }
+</style>
+
+
+<div class="mb-3 mt-3 text-center flex-column" style="font-size: 40px;">Analytics of your travels</div>
+
+<div class="container">
+    <div class="diagram1">
+        @if(isLoading)
+        {
+            <MudBlazor.MudChart ChartType="MudBlazor.ChartType.Donut" Width="300px" Height="300px" InputData="@data" InputLabels="@labels">
+                <CustomGraphics>
+                    <text class="donut-inner-text" x="50%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="20">Total</text>
+                    <text class="donut-inner-text" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="50">@data.Sum().ToString()</text>
+                </CustomGraphics>
+            </MudBlazor.MudChart>
+        }
+        
+        <div class="label1 text-center">Frequency of country visits</div>
+    </div>
+        @if(isLoading)
+        {
+    <div class="diagram2">
+        <MudBlazor.MudPaper Class="doc-section-component-container">
+                <MudBlazor.MudChart ChartType="MudBlazor.ChartType.StackedBar" ChartSeries="@_series" @bind-SelectedIndex="_index" XAxisLabels="@_xAxisLabels" Width="@_width" Height="@_height" AxisChartOptions="_axisChartOptions"></MudBlazor.MudChart>
+        </MudBlazor.MudPaper>
+        <div class="label2 text-center">The longest trips</div>
+    </div>
+        }
+    <MudBlazor.MudSelect T="int?" Label="Оберіть рік" @bind-Value="selectedYear" @onchange="OnYearChanged" Style="width: 200px;">
+        <MudBlazor.MudSelectItem T="int?" Value="null">Всі роки</MudBlazor.MudSelectItem>
+        @foreach (var year in availableYears)
+        {
+            <MudBlazor.MudSelectItem Value="@year">@year</MudBlazor.MudSelectItem>
+        }
+    </MudBlazor.MudSelect>
+    <MudBlazor.MudPopoverProvider />
+</div>
+
+@code {
+    private int? selectedYear = null; // null = всі роки
+    private List<int> availableYears = new();
+
+    private int _index = -1;
+    private string _width = "650px";
+    private string _height = "350px";
+    private MudBlazor.AxisChartOptions _axisChartOptions = new MudBlazor.AxisChartOptions();
+
+    private List<MudBlazor.ChartSeries> _series = new List<MudBlazor.ChartSeries>();
+    private string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"};
+
+    private List<Trip>? trips;
+    private string userId;
+    private string[] labels; 
+    private double[] data;     
+    private bool isLoading = false;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (int.TryParse(userId, out int parsedUserId))
+        {
+            trips = await TripService.GetAllTripsAsync(parsedUserId);
+
+            availableYears = trips
+            .Select(t => t.StartDate.Year)
+            .Distinct()
+            .OrderByDescending(y => y)
+            .ToList();
+
+            UpdateAnalytics();
+
+            var tripsByCountry = trips
+                .GroupBy(t => t.Country)
+                .Select(g => new { Country = g.Key, TripCount = g.Count() })
+                .ToList();
+
+            labels = tripsByCountry.Select(t => t.Country).ToArray();
+            data = tripsByCountry.Select(t => (double)t.TripCount).ToArray();
+
+            var monthlyTripDays = new double[12];
+            var uniqueTravelDates = new HashSet<DateTime>();
+
+            foreach (var trip in trips)
+            {
+                for (var date = trip.StartDate.Date; date <= trip.EndDate.Date; date = date.AddDays(1))
+                {
+                    uniqueTravelDates.Add(date);
+                }
+            }
+
+            foreach (var date in uniqueTravelDates)
+            {
+                int monthIndex = date.Month - 1;
+                monthlyTripDays[monthIndex]++;
+            }
+
+            _series = new List<MudBlazor.ChartSeries>()
+            {
+            new MudBlazor.ChartSeries()
+            {
+                Name = "Days of Travel",
+                Data = monthlyTripDays
+            }
+            };
+        }
+        isLoading = true;
+    }
+
+    private void UpdateAnalytics()
+    {
+        var filteredTrips = selectedYear == null
+            ? trips
+            : trips.Where(t => t.StartDate.Year == selectedYear).ToList();
+
+        // Групування по країнах
+        var tripsByCountry = filteredTrips
+            .GroupBy(t => t.Country)
+            .Select(g => new { Country = g.Key, TripCount = g.Count() })
+            .ToList();
+
+        labels = tripsByCountry.Select(t => t.Country).ToArray();
+        data = tripsByCountry.Select(t => (double)t.TripCount).ToArray();
+
+        // Унікальні дні
+        var uniqueTravelDates = new HashSet<DateTime>();
+        foreach (var trip in filteredTrips)
+        {
+            for (var date = trip.StartDate.Date; date <= trip.EndDate.Date; date = date.AddDays(1))
+            {
+                uniqueTravelDates.Add(date);
+            }
+        }
+
+        var monthlyTripDays = new double[12];
+        foreach (var date in uniqueTravelDates)
+        {
+            int monthIndex = date.Month - 1;
+            monthlyTripDays[monthIndex]++;
+        }
+
+        _series = new List<MudBlazor.ChartSeries>()
+        {
+            new MudBlazor.ChartSeries()
+            {
+                Name = "Унікальні дні подорожей",
+                Data = monthlyTripDays
+            }
+        };
+    }
+    private void OnYearChanged(ChangeEventArgs e)
+    {
+        UpdateAnalytics();
+    }
+}

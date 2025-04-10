@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\pages\\analytics.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\pages\\analytics.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Analytics.razor",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Analytics.razor",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor",
+              "RelativeToolTip": "Components\\Pages\\Analytics.razor",
+              "ViewState": "AgIAACIAAAAAAAAAAAAAADcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-05T12:58:58.33Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T08:49:40.512Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

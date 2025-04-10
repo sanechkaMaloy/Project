@@ -1,0 +1,29 @@
+.container[b-tcc67lwanf] {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-end;
+    margin-top: 5%;
+}
+
+.diagram1[b-tcc67lwanf] {
+    width: 30%;
+    height: auto;
+}
+
+.diagram2[b-tcc67lwanf] {
+    width: 50%;
+    height: auto;
+}
+
+.label1[b-tcc67lwanf] {
+    font-size: 30px;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+.label2[b-tcc67lwanf] {
+    font-size: 30px;
+    margin-top: 2rem;
+    font-weight: bold;
+}

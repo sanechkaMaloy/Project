@@ -1,0 +1,280 @@
+﻿    @page "/add"
+    @using Microsoft.AspNetCore.Authorization
+    @inject AuthenticationStateProvider AuthenticationStateProvider
+    @inject HttpClient Http
+    @rendermode InteractiveServer
+    @attribute [Authorize]
+    @using System.Globalization;
+    @using Microsoft.AspNetCore.Localization;
+    @using Microsoft.Extensions.Options;
+
+    <PageTitle>Add</PageTitle>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f8ff;
+    }
+
+    .add-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        min-height: 90vh;
+    }
+
+    .add-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 550px;
+        text-align: center;
+    }
+
+    .OnTop{
+        font-size: 40px;
+    }
+</style>
+<div class="add-container">
+    <div class="add-form">
+
+        <div class="container" OnValidSubmit="SubmitTrip">
+            <div class="OnTop mb-3">Add your trip!</div>
+            <!-- Вибір країни -->
+        <EditForm Model="@trip" OnValidSubmit="SubmitTrip">
+            <DataAnnotationsValidator />
+
+            <!-- Вибір країни -->
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <select id="country" class="form-control" @bind="SelectedCountry" @bind:after="LoadCities">
+                    <option value="">-- Select Country --</option>
+                    @foreach (var country in Countries)
+                    {
+                        <option value="@country.Cca2">@country.Name.Common</option>
+                    }
+                </select>
+                <ValidationMessage For="@(() => trip.Country)" class="text-danger" />
+            </div>
+
+            <!-- Вибір міста -->
+            <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <select id="city" class="form-control" @bind="SelectedCity">
+                    <option value="">-- Select City --</option>
+                    @foreach (var city in Cities)
+                    {
+                        <option value="@city">@city</option>
+                    }
+                </select>
+                <ValidationMessage For="@(() => trip.City)" class="text-danger" />
+            </div>
+
+            <!-- Дати -->
+                <div class="mb-3">
+                    <label class="mb-2">Start date:</label>
+                <InputDate @bind-Value="dateRange.StartDate" id="startDate" class="form-control" max="@dateRange.EndDate" />
+                <ValidationMessage For="@(() => dateRange.StartDate)" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label class="mb-2">End date:</label>
+                <InputDate @bind-Value="dateRange.EndDate" id="endDate" class="form-control" min="@dateRange.StartDate" />
+                <ValidationMessage For="@(() =>dateRange.EndDate)" class="text-danger" />
+                </div>
+
+            <!-- Фото -->
+            <div class="mb-2">Photo:</div>
+            <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    <InputFile accept=".jpg, .jpeg, .png" class="form-control" id="inputGroupFile01"  OnChange="HandleFileSelected" />
+            </div>
+
+            <!-- Нотатки -->
+            <div class="mb-3">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" @bind="Note"></textarea>
+                    <label for="floatingTextarea">Comments</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+            @if (!string.IsNullOrEmpty(SuccessMessage))
+            {
+                <div class="alert alert-success mt-3" role="alert">
+                    @SuccessMessage
+                </div>
+            }
+        </EditForm>
+        </div>
+    </div>
+</div>
+@code {
+
+    private string? UserId;
+    private string SuccessMessage = "";
+
+    private List<Country> Countries { get; set; } = new();
+    private List<string> Cities { get; set; } = new();
+
+    private string SelectedCountry
+    {
+        get => trip.Country;
+        set
+        {
+            trip.Country = value;
+            LoadCities();
+        }
+    }
+    private string SelectedCity
+    {
+        get => trip.City;
+        set => trip.City = value;
+    }
+    private string Note { get; set; } = "";
+    private byte[]? ImageData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            UserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+        await LoadCountries();
+    }
+    private async Task LoadCountries()
+    {
+        try
+        {
+            var countries = await Http.GetFromJsonAsync<List<Country>>("https://restcountries.com/v3.1/all");
+            if (countries != null)
+            {
+                Countries = countries.OrderBy(c => c.Name.Common).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading countries: {ex.Message}");
+        }
+    }
+
+    private async Task LoadCities()
+    {
+        try
+        {
+            string url = $"https://secure.geonames.org/searchJSON?country={SelectedCountry}&featureClass=P&maxRows=100&username=batonius";
+
+            var response = await Http.GetFromJsonAsync<GeonamesResponse>(url);
+
+            if (response?.Geonames != null)
+            {
+                Cities = response.Geonames.Select(c => c.Name).OrderBy(c => c).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading cities: {ex.Message}");
+        }
+
+        StateHasChanged(); // Оновлення стану
+    }
+
+    //для дати
+
+    private DateRangeModel dateRange = new()
+            {
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(1) 
+            };
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using var stream = file.OpenReadStream();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            ImageData = memoryStream.ToArray();
+        }
+    }
+
+        Trip trip = new Trip();
+        private async Task SubmitTrip()
+        {
+            trip.UserId = Convert.ToInt32(UserId);
+            trip.Country = SelectedCountry;
+            trip.City = SelectedCity;
+            trip.StartDate = DateTime.SpecifyKind(dateRange.StartDate, DateTimeKind.Utc);
+            trip.EndDate = DateTime.SpecifyKind(dateRange.EndDate, DateTimeKind.Utc);
+            trip.Notes = Note;
+            trip.Image = ImageData;
+
+            var response = await Http.PostAsJsonAsync("api/trips", trip);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Added!");
+                trip = new Trip(); // Очистити форму після відправки
+
+                SelectedCountry = "";
+                SelectedCity = "";
+                Note = "";
+                ImageData = null;
+                dateRange = new DateRangeModel
+                {
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddDays(1)
+                };
+                Cities.Clear();
+
+                SuccessMessage = "Trip added successfully!";
+                        
+                StateHasChanged();
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error adding trip: {response.ReasonPhrase}, Content: {errorContent}");
+            }
+
+        }
+
+        public class DateRangeModel
+        {
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+
+        }
+
+        private class Country
+        {
+            public string Cca2 { get; set; }
+            public Name Name { get; set; }
+        }
+
+        private class Name
+        {
+            public string Common { get; set; }
+        }
+
+        private class GeonamesResponse
+        {
+            public List<Geoname> Geonames { get; set; }
+        }
+
+        private class Geoname
+        {
+            public string Name { get; set; }
+        }
+    }

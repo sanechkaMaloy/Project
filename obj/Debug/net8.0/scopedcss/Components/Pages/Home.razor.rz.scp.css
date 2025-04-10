@@ -1,0 +1,47 @@
+
+.backhome[b-x0adpbawup] {
+    width: 100%;
+    height: auto;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+}
+
+.banner[b-x0adpbawup] {
+    color: #808080;
+    font-size: 20px;
+    font-family: 'Sour Gummy';
+    margin-top: 200px;
+    letter-spacing:5px;
+    word-spacing: 10px;
+}
+
+.next-banner[b-x0adpbawup] {
+    font-size: 50px;
+    font-family: 'Sour Gummy';
+}
+
+.description[b-x0adpbawup] {
+    font-size: 30px;
+    color: #161616;
+    margin-bottom: 300px; 
+}
+
+.container[b-x0adpbawup] {
+    position: relative;
+    margin: 0 auto; 
+    padding: 20px;
+}
+
+.text-content[b-x0adpbawup] {
+    position: relative;
+    z-index: 1; 
+}
+
+.photo[b-x0adpbawup] {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+

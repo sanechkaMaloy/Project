@@ -1,0 +1,113 @@
+﻿@page "/map"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
+
+@inject IJSRuntime JS
+@inject HttpClient Http
+@inject TripService TripService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@attribute [Authorize]
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ&callback=initMap"></script>
+
+<PageTitle>Map</PageTitle>
+
+<div id="map" style="width: 100%; height: calc(100vh - 4.5rem);"></div>
+
+<script>
+    let map;
+
+    function initMap(locations) {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 50.4501, lng: 30.5234 }, // Київ
+            zoom: 10
+        });
+
+        if (locations && locations.length > 0) {
+            locations.forEach(loc => {
+                new google.maps.Marker({
+                    position: { lat: loc.lat, lng: loc.lng },
+                    map: map
+                });
+            });
+        } else {
+            console.log('No locations available to add markers');
+        }
+    }
+
+</script>
+
+
+@code {
+    private List<Trip>? trips;
+    private string userId;
+    private List<Location> locations = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (int.TryParse(userId, out int parsedUserId))
+        {
+            trips = await TripService.GetAllTripsAsync(parsedUserId);
+
+            foreach (var trip in trips)
+            {
+                var (lat, lng) = await GetCoordinates(trip.City, trip.Country);
+                if (lat != 0 && lng != 0) // Перевірка на коректні координати
+                {
+                    locations.Add(new Location { Lat = lat, Lng = lng });
+                }
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+            Console.WriteLine($"1: {locations.Count}");
+            if (!firstRender && locations.Any())
+            Console.WriteLine($"2: {locations.Count}");
+            {
+                await JS.InvokeVoidAsync("initMap", locations);
+            }
+    }
+
+    private async Task<(double lat, double lng)> GetCoordinates(string city, string country)
+    {
+        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={"AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ"}";
+
+        var response = await Http.GetFromJsonAsync<GeoResponse>(url);
+        if (response?.Results?.Length > 0)
+        {
+            var location = response.Results[0].Geometry.Location;
+            return (location.Lat, location.Lng);
+        }
+        return (0, 0);
+    }
+
+    private class GeoResponse
+    {
+        public GeoResult[] Results { get; set; }
+    }
+
+    private class GeoResult
+    {
+        public Geometry Geometry { get; set; }
+    }
+
+    private class Geometry
+    {
+        public Location Location { get; set; }
+    }
+
+    private class Location
+    {
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+    }
+}
