@@ -20,7 +20,6 @@
 
 
 <div class="mb-3 mt-3 text-center flex-column" style="font-size: 40px;">Analytics of your travels</div>
-
 <div class="container">
     <div class="diagram1">
         @if(isLoading)
@@ -44,18 +43,31 @@
         <div class="label2 text-center">The longest trips</div>
     </div>
         }
-    <MudBlazor.MudSelect T="int?" Label="Оберіть рік" @bind-Value="selectedYear" @onchange="OnYearChanged" Style="width: 200px;">
+    <MudBlazor.MudSelect T="int?" Label="Оберіть рік" @bind-Value="selectedYear" Style="width: 200px;">
         <MudBlazor.MudSelectItem T="int?" Value="null">Всі роки</MudBlazor.MudSelectItem>
         @foreach (var year in availableYears)
         {
-            <MudBlazor.MudSelectItem Value="@year">@year</MudBlazor.MudSelectItem>
+            <MudBlazor.MudSelectItem Value="@((int?)year)">@year</MudBlazor.MudSelectItem>
         }
     </MudBlazor.MudSelect>
     <MudBlazor.MudPopoverProvider />
 </div>
 
 @code {
-    private int? selectedYear = null; // null = всі роки
+    private int? _selectedYear = null;
+    private int? selectedYear
+    {
+        get => _selectedYear;
+        set
+        {
+            if (_selectedYear != value)
+            {
+                _selectedYear = value;
+                UpdateAnalytics();
+            }
+        }
+    }
+
     private List<int> availableYears = new();
 
     private int _index = -1;
