@@ -1,6 +1,7 @@
 ﻿@page "/analytics"
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims;
+@using System.Globalization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject TripService TripService
 @rendermode InteractiveServer
@@ -16,10 +17,30 @@
         align-items: center;
         background-color: #f0f8ff;
     }
+
+    .mud-popover .mud-list {
+        max-height: 100px;
+        overflow-y: auto;
+    }
+
+    .mud-popover .mud-list-item {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
 </style>
 
 
 <div class="mb-3 mt-3 text-center flex-column" style="font-size: 40px;">Analytics of your travels</div>
+<div class="year">
+    <MudBlazor.MudSelect T="int?" Label="Choose a year" @bind-Value="selectedYear" Style="width: 100px;" >
+        <MudBlazor.MudSelectItem T="int?" Value="null">All years</MudBlazor.MudSelectItem>
+        @foreach (var year in availableYears)
+        {
+            <MudBlazor.MudSelectItem Value="@((int?)year)">@year</MudBlazor.MudSelectItem>
+        }
+    </MudBlazor.MudSelect>
+    <MudBlazor.MudPopoverProvider />
+</div>
 <div class="container">
     <div class="diagram1">
         @if(isLoading)
@@ -40,17 +61,9 @@
         <MudBlazor.MudPaper Class="doc-section-component-container">
                 <MudBlazor.MudChart ChartType="MudBlazor.ChartType.StackedBar" ChartSeries="@_series" @bind-SelectedIndex="_index" XAxisLabels="@_xAxisLabels" Width="@_width" Height="@_height" AxisChartOptions="_axisChartOptions"></MudBlazor.MudChart>
         </MudBlazor.MudPaper>
-        <div class="label2 text-center">The longest trips</div>
+            <div class="label2 text-center">Days Spent Traveling Each Month</div>
     </div>
         }
-    <MudBlazor.MudSelect T="int?" Label="Оберіть рік" @bind-Value="selectedYear" Style="width: 200px;">
-        <MudBlazor.MudSelectItem T="int?" Value="null">Всі роки</MudBlazor.MudSelectItem>
-        @foreach (var year in availableYears)
-        {
-            <MudBlazor.MudSelectItem Value="@((int?)year)">@year</MudBlazor.MudSelectItem>
-        }
-    </MudBlazor.MudSelect>
-    <MudBlazor.MudPopoverProvider />
 </div>
 
 @code {
@@ -73,8 +86,8 @@
     private int _index = -1;
     private string _width = "650px";
     private string _height = "350px";
-    private MudBlazor.AxisChartOptions _axisChartOptions = new MudBlazor.AxisChartOptions();
 
+    private MudBlazor.AxisChartOptions _axisChartOptions = new MudBlazor.AxisChartOptions();
     private List<MudBlazor.ChartSeries> _series = new List<MudBlazor.ChartSeries>();
     private string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"};
 
@@ -106,7 +119,8 @@
                 .Select(g => new { Country = g.Key, TripCount = g.Count() })
                 .ToList();
 
-            labels = tripsByCountry.Select(t => t.Country).ToArray();
+            labels = tripsByCountry.Select(t => GetCountryName(t.Country)).ToArray();
+
             data = tripsByCountry.Select(t => (double)t.TripCount).ToArray();
 
             var monthlyTripDays = new double[12];
@@ -155,6 +169,7 @@
 
         // Унікальні дні
         var uniqueTravelDates = new HashSet<DateTime>();
+
         foreach (var trip in filteredTrips)
         {
             for (var date = trip.StartDate.Date; date <= trip.EndDate.Date; date = date.AddDays(1))
@@ -174,7 +189,7 @@
         {
             new MudBlazor.ChartSeries()
             {
-                Name = "Унікальні дні подорожей",
+                Name = "Days of Travel",
                 Data = monthlyTripDays
             }
         };
@@ -182,5 +197,17 @@
     private void OnYearChanged(ChangeEventArgs e)
     {
         UpdateAnalytics();
+    }
+    private string GetCountryName(string countryCode)
+    {
+        try
+        {
+            var region = new RegionInfo(countryCode);
+            return region.EnglishName;
+        }
+        catch
+        {
+            return countryCode;
+        }
     }
 }

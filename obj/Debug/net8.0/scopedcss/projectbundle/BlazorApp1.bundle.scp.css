@@ -111,8 +111,8 @@ main[b-j65y7q72mt] {
 .top-row[b-5bndfk4shp] {
     height: 4rem;
     background-color: none;
-    width: 20%;
-    margin: 1rem;
+    width: 23%;
+    margin: 4rem;
 }
 
 
@@ -281,13 +281,11 @@ main[b-j65y7q72mt] {
     font-weight: bold;
 }
 
-.fade-in[b-tcc67lwanf] {
-    animation: fadeIn-b-tcc67lwanf 0.5s ease-in-out;
-}
-
-@keyframes fadeIn-b-tcc67lwanf {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+.year[b-tcc67lwanf] {
+    width: 200px;
+    height: auto;
+    margin: 0 auto;
+    font-size: 15px;
 }
 /* _content/BlazorApp1/Components/Pages/Home.razor.rz.scp.css */
 

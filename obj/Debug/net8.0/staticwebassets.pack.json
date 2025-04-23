@@ -5,6 +5,22 @@
       "PackagePath": "staticwebassets\\BlazorApp1.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\Images\\favicon.png",
+      "PackagePath": "staticwebassets\\Images\\favicon.png"
+    },
+    {
+      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\Images\\home 2.jpg",
+      "PackagePath": "staticwebassets\\Images\\home 2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\Images\\phone1.jpg",
+      "PackagePath": "staticwebassets\\Images\\phone1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\Images\\underline.png",
+      "PackagePath": "staticwebassets\\Images\\underline.png"
+    },
+    {
       "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
     },
@@ -15,30 +31,6 @@
     {
       "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\favicon.png",
-      "PackagePath": "staticwebassets\\favicon.png"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\home 2.jpg",
-      "PackagePath": "staticwebassets\\home 2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\logos.png",
-      "PackagePath": "staticwebassets\\logos.png"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\phone.jpg",
-      "PackagePath": "staticwebassets\\phone.jpg"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\phone1.jpg",
-      "PackagePath": "staticwebassets\\phone1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\wwwroot\\underline.png",
-      "PackagePath": "staticwebassets\\underline.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BlazorApp1.Microsoft.AspNetCore.StaticWebAssets.props",

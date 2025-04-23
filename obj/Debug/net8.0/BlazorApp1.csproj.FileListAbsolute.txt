@@ -209,3 +209,6 @@ C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\BlazorDebugProxy\Microso
 C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.SymbolStore.dll
 C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\BlazorDebugProxy\Newtonsoft.Json.dll
 C:\Users\davai\source\repos\BlazorApp1\obj\Debug\net8.0\BlazorApp1.sourcelink.json
+C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\BlazorComponentUtilities.dll
+C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\BlazorPro.Spinkit.dll
+C:\Users\davai\source\repos\BlazorApp1\bin\Debug\net8.0\appsettings.Production.json

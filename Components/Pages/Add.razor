@@ -1,14 +1,14 @@
-﻿    @page "/add"
-    @using Microsoft.AspNetCore.Authorization
-    @inject AuthenticationStateProvider AuthenticationStateProvider
-    @inject HttpClient Http
-    @rendermode InteractiveServer
-    @attribute [Authorize]
-    @using System.Globalization;
-    @using Microsoft.AspNetCore.Localization;
-    @using Microsoft.Extensions.Options;
+﻿@page "/add"
+@using Microsoft.AspNetCore.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient Http
+@rendermode InteractiveServer
+@attribute [Authorize]
+@using System.Globalization;
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.Extensions.Options;
 
-    <PageTitle>Add</PageTitle>
+<PageTitle>Add</PageTitle>
 
 <style>
     html, body {
@@ -41,82 +41,100 @@
     .OnTop{
         font-size: 40px;
     }
+
+    .custom-spinner {
+        margin-top: 300px;
+    }
+
 </style>
-<div class="add-container">
-    <div class="add-form">
+<SpinLoader IsLoading="isLoading" Spinner="SpinnerType.Chase" Center="true" Class="custom-spinner" Size="100px">
+    <ContentTemplate>
+        <div class="add-container">
+            <div class="add-form">
 
-        <div class="container" OnValidSubmit="SubmitTrip">
-            <div class="OnTop mb-3">Add your trip!</div>
-            <!-- Вибір країни -->
-        <EditForm Model="@trip" OnValidSubmit="SubmitTrip">
-            <DataAnnotationsValidator />
+                <div class="container">
+                    <div class="OnTop mb-3">Add your trip!</div>
+                    <!-- Вибір країни -->
+                <EditForm Model="@trip" OnValidSubmit="SubmitTrip">
+                    <DataAnnotationsValidator />
 
-            <!-- Вибір країни -->
-            <div class="mb-3">
-                <label for="country" class="form-label">Country</label>
-                <select id="country" class="form-control" @bind="SelectedCountry" @bind:after="LoadCities">
-                    <option value="">-- Select Country --</option>
-                    @foreach (var country in Countries)
+                    <!-- Вибір країни -->
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <select id="country" class="form-control" @bind="SelectedCountry" @bind:after="LoadCities">
+                            <option value="">-- Select Country --</option>
+                            @foreach (var country in Countries)
+                            {
+                                <option value="@country.Cca2">@country.Name.Common</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => trip.Country)" class="text-danger" />
+                    </div>
+
+                    <!-- Вибір міста -->
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <select id="city" class="form-control" @bind="SelectedCity">
+                            <option value="">-- Select City --</option>
+                            @foreach (var city in Cities)
+                            {
+                                <option value="@city">@city</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => trip.City)" class="text-danger" />
+                    </div>
+
+                    <!-- Дати -->
+                    <div class="mb-3">
+                        <label class="mb-2">Start date:</label>
+                    <InputDate @bind-Value="dateRange.StartDate" id="startDate" class="form-control" max="@dateRange.EndDate" />
+                    <ValidationMessage For="@(() => dateRange.StartDate)" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="mb-2">End date:</label>
+                    <InputDate @bind-Value="dateRange.EndDate" id="endDate" class="form-control" min="@dateRange.StartDate" />
+                    <ValidationMessage For="@(() =>dateRange.EndDate)" class="text-danger" />
+                    </div>
+                    @if (!string.IsNullOrEmpty(ErrorMessage))
                     {
-                        <option value="@country.Cca2">@country.Name.Common</option>
+                        <div class="alert alert-danger mt-3" role="alert">
+                            @ErrorMessage
+                        </div>
                     }
-                </select>
-                <ValidationMessage For="@(() => trip.Country)" class="text-danger" />
-            </div>
 
-            <!-- Вибір міста -->
-            <div class="mb-3">
-                <label for="city" class="form-label">City</label>
-                <select id="city" class="form-control" @bind="SelectedCity">
-                    <option value="">-- Select City --</option>
-                    @foreach (var city in Cities)
+
+                    <!-- Фото -->
+                    <div class="mb-2">Photo:</div>
+                    <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                            <InputFile accept=".jpg, .jpeg, .png" class="form-control" id="inputGroupFile01"  OnChange="HandleFileSelected" />
+                    </div>
+
+                    <!-- Нотатки -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" @bind="Note"></textarea>
+                            <label for="floatingTextarea">Comments</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                    @if (!string.IsNullOrEmpty(SuccessMessage))
                     {
-                        <option value="@city">@city</option>
+                        <div class="alert alert-success mt-3" role="alert">
+                            @SuccessMessage
+                        </div>
                     }
-                </select>
-                <ValidationMessage For="@(() => trip.City)" class="text-danger" />
-            </div>
-
-            <!-- Дати -->
-                <div class="mb-3">
-                    <label class="mb-2">Start date:</label>
-                <InputDate @bind-Value="dateRange.StartDate" id="startDate" class="form-control" max="@dateRange.EndDate" />
-                <ValidationMessage For="@(() => dateRange.StartDate)" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label class="mb-2">End date:</label>
-                <InputDate @bind-Value="dateRange.EndDate" id="endDate" class="form-control" min="@dateRange.StartDate" />
-                <ValidationMessage For="@(() =>dateRange.EndDate)" class="text-danger" />
-                </div>
-
-            <!-- Фото -->
-            <div class="mb-2">Photo:</div>
-            <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
-                    <InputFile accept=".jpg, .jpeg, .png" class="form-control" id="inputGroupFile01"  OnChange="HandleFileSelected" />
-            </div>
-
-            <!-- Нотатки -->
-            <div class="mb-3">
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" @bind="Note"></textarea>
-                    <label for="floatingTextarea">Comments</label>
+                </EditForm>
                 </div>
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-
-            @if (!string.IsNullOrEmpty(SuccessMessage))
-            {
-                <div class="alert alert-success mt-3" role="alert">
-                    @SuccessMessage
-                </div>
-            }
-        </EditForm>
         </div>
-    </div>
-</div>
+    </ContentTemplate>
+</SpinLoader>
 @code {
+    private bool isLoading = true;
+    private bool isFirstRender = true;
 
     private string? UserId;
     private string SuccessMessage = "";
@@ -141,16 +159,28 @@
     private string Note { get; set; } = "";
     private byte[]? ImageData;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+    private string ErrorMessage = "";
 
-        if (user.Identity?.IsAuthenticated == true)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (isFirstRender)
         {
-            UserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            isFirstRender = false;
+            isLoading = true;
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                UserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            }
+
+            await LoadCountries();
+
+            isLoading = false;
+            StateHasChanged(); 
         }
-        await LoadCountries();
     }
     private async Task LoadCountries()
     {
@@ -192,10 +222,10 @@
     //для дати
 
     private DateRangeModel dateRange = new()
-            {
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(1) 
-            };
+        {
+            StartDate = DateTime.Today,
+            EndDate = DateTime.Today.AddDays(1) 
+        };
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
@@ -209,72 +239,76 @@
         }
     }
 
-        Trip trip = new Trip();
-        private async Task SubmitTrip()
+    Trip trip = new Trip();
+    private async Task SubmitTrip()
+    {
+        trip.UserId = Convert.ToInt32(UserId);
+        trip.Country = SelectedCountry;
+        trip.City = SelectedCity;
+        trip.StartDate = DateTime.SpecifyKind(dateRange.StartDate, DateTimeKind.Utc);
+        trip.EndDate = DateTime.SpecifyKind(dateRange.EndDate, DateTimeKind.Utc);
+        if(trip.StartDate > trip.EndDate)
         {
-            trip.UserId = Convert.ToInt32(UserId);
-            trip.Country = SelectedCountry;
-            trip.City = SelectedCity;
-            trip.StartDate = DateTime.SpecifyKind(dateRange.StartDate, DateTimeKind.Utc);
-            trip.EndDate = DateTime.SpecifyKind(dateRange.EndDate, DateTimeKind.Utc);
-            trip.Notes = Note;
-            trip.Image = ImageData;
+            ErrorMessage = "Start date cannot be after end date.";
+            return;
+        }
+        trip.Notes = Note;
+        trip.Image = ImageData;
 
-            var response = await Http.PostAsJsonAsync("api/trips", trip);
+        var response = await Http.PostAsJsonAsync("api/trips", trip);
 
-            if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Added!");
+            trip = new Trip(); // Очистити форму після відправки
+
+            SelectedCountry = "";
+            SelectedCity = "";
+            Note = "";
+            ImageData = null;
+            dateRange = new DateRangeModel
             {
-                Console.WriteLine("Added!");
-                trip = new Trip(); // Очистити форму після відправки
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(1)
+            };
+            Cities.Clear();
 
-                SelectedCountry = "";
-                SelectedCity = "";
-                Note = "";
-                ImageData = null;
-                dateRange = new DateRangeModel
-                {
-                    StartDate = DateTime.Today,
-                    EndDate = DateTime.Today.AddDays(1)
-                };
-                Cities.Clear();
-
-                SuccessMessage = "Trip added successfully!";
-                        
-                StateHasChanged();
-            }
-            else
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Error adding trip: {response.ReasonPhrase}, Content: {errorContent}");
-            }
-
+            SuccessMessage = "Trip added successfully!";
+            ErrorMessage = "";
+            StateHasChanged();
         }
-
-        public class DateRangeModel
+        else
         {
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
-
+            var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error adding trip: {response.ReasonPhrase}, Content: {errorContent}");
         }
 
-        private class Country
-        {
-            public string Cca2 { get; set; }
-            public Name Name { get; set; }
-        }
-
-        private class Name
-        {
-            public string Common { get; set; }
-        }
-
-        private class GeonamesResponse
-        {
-            public List<Geoname> Geonames { get; set; }
-        }
-
-        private class Geoname
-        {
-            public string Name { get; set; }
-        }
     }
+
+    public class DateRangeModel
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    private class Country
+    {
+        public string Cca2 { get; set; }
+        public Name Name { get; set; }
+    }
+
+    private class Name
+    {
+        public string Common { get; set; }
+    }
+
+    private class GeonamesResponse
+    {
+        public List<Geoname> Geonames { get; set; }
+    }
+
+    private class Geoname
+    {
+        public string Name { get; set; }
+    }
+}

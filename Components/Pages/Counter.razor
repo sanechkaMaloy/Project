@@ -7,10 +7,11 @@
 @inject HttpClient Http
 @inject TripService TripService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IConfiguration Configuration
 
 @attribute [Authorize]
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleApi:MapsKey"]&callback=initMap"></script>
 
 <PageTitle>Map</PageTitle>
 
@@ -45,7 +46,8 @@
     private string userId;
     private List<Location> locations = new();
 
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
@@ -64,22 +66,18 @@
                 }
             }
         }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        
-            Console.WriteLine($"1: {locations.Count}");
-            if (!firstRender && locations.Any())
-            Console.WriteLine($"2: {locations.Count}");
-            {
-                await JS.InvokeVoidAsync("initMap", locations);
-            }
+        Console.WriteLine($"1: {locations.Count}");
+        if (!firstRender && locations.Any())
+        Console.WriteLine($"2: {locations.Count}");
+        {
+            await JS.InvokeVoidAsync("initMap", locations);
+        }
     }
 
     private async Task<(double lat, double lng)> GetCoordinates(string city, string country)
     {
-        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={"AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ"}";
+        var apiKey = Configuration["GoogleApi:MapsKey"];
+        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={apiKey}";
 
         var response = await Http.GetFromJsonAsync<GeoResponse>(url);
         if (response?.Results?.Length > 0)

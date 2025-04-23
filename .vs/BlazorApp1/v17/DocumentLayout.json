@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\pages\\analytics.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\pages\\analytics.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\pages\\analytics.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\pages\\analytics.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\pages\\add.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\pages\\add.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|solutionrelative:components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{18230134-DE1F-4A74-AC0B-0D9E978C4DA8}|BlazorApp1.csproj|c:\\users\\davai\\source\\repos\\blazorapp1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,43 +30,66 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Analytics.razor.css",
-              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor.css",
-              "RelativeDocumentMoniker": "Components\\Pages\\Analytics.razor.css",
-              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor.css",
-              "RelativeToolTip": "Components\\Pages\\Analytics.razor.css",
-              "ViewState": "AgIAABAAAAAAAAAAAAAUwBwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-04-11T09:31:51.806Z",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Production.json",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\appsettings.Production.json",
+              "RelativeDocumentMoniker": "appsettings.Production.json",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\appsettings.Production.json",
+              "RelativeToolTip": "appsettings.Production.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-23T14:47:41.41Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Analytics.razor",
-              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor",
-              "RelativeDocumentMoniker": "Components\\Pages\\Analytics.razor",
-              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Analytics.razor",
-              "RelativeToolTip": "Components\\Pages\\Analytics.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAYAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Counter.razor",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Counter.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Counter.razor",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Counter.razor",
+              "RelativeToolTip": "Components\\Pages\\Counter.razor",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAqwFcAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-05T12:58:58.33Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T14:09:37.879Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Add.razor",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Add.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Add.razor",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\Pages\\Add.razor",
+              "RelativeToolTip": "Components\\Pages\\Add.razor",
+              "ViewState": "AgIAABIBAAAAAAAAAAAqwDoBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-14T12:31:28.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Components\\App.razor",
+              "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Components\\App.razor",
+              "RelativeToolTip": "Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T07:05:35.794Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\davai\\source\\repos\\BlazorApp1\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-26T08:49:40.512Z"
             }
