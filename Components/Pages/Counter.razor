@@ -7,11 +7,10 @@
 @inject HttpClient Http
 @inject TripService TripService
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IConfiguration Configuration
 
 @attribute [Authorize]
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleApi:MapsKey"]&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap"></script>
 
 <PageTitle>Map</PageTitle>
 
@@ -68,7 +67,7 @@
         }
         Console.WriteLine($"1: {locations.Count}");
         if (!firstRender && locations.Any())
-        Console.WriteLine($"2: {locations.Count}");
+            Console.WriteLine($"2: {locations.Count}");
         {
             await JS.InvokeVoidAsync("initMap", locations);
         }
@@ -76,8 +75,7 @@
 
     private async Task<(double lat, double lng)> GetCoordinates(string city, string country)
     {
-        var apiKey = Configuration["GoogleApi:MapsKey"];
-        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={apiKey}";
+        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={"APIKEY"}";
 
         var response = await Http.GetFromJsonAsync<GeoResponse>(url);
         if (response?.Results?.Length > 0)

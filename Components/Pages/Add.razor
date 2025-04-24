@@ -202,7 +202,7 @@
     {
         try
         {
-            string url = $"https://secure.geonames.org/searchJSON?country={SelectedCountry}&featureClass=P&maxRows=100&username=batonius";
+            string url = $"https://secure.geonames.org/searchJSON?country={SelectedCountry}&featureClass=P&maxRows=100&username=USERNAME";
 
             var response = await Http.GetFromJsonAsync<GeonamesResponse>(url);
 
