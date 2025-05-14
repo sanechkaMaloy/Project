@@ -10,7 +10,7 @@
 
 @attribute [Authorize]
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ&callback=initMap"></script>
 
 <PageTitle>Map</PageTitle>
 
@@ -75,7 +75,7 @@
 
     private async Task<(double lat, double lng)> GetCoordinates(string city, string country)
     {
-        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={"APIKEY"}";
+        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={city},{country}&key={"AIzaSyBSMmO9rGCRohosUWjGFxX6zySesX1D2dQ"}";
 
         var response = await Http.GetFromJsonAsync<GeoResponse>(url);
         if (response?.Results?.Length > 0)
